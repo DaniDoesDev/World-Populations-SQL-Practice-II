@@ -1,0 +1,77 @@
+--SELECT *
+--FROM countries;
+
+--SELECT *
+--FROM population_years;
+
+-- Find how many entries in the countries table are from Africa
+SELECT COUNT(*)
+FROM countries
+WHERE continent = 'Africa';
+
+-- Find total pop of the continent of Oceania in 2005
+WITH temp_pop AS (
+  SELECT *
+  FROM population_years
+  JOIN countries
+  ON population_years.country_id = countries.id
+)
+SELECT continent, year, ROUND(SUM(population), 2) AS total_population
+FROM temp_pop
+WHERE continent = 'Oceania' AND year = 2005;
+
+-- Find the average pop of countries in South America in 2003
+WITH temp_pop AS (
+  SELECT *
+  FROM population_years
+  JOIN countries
+  ON population_years.country_id = countries.id
+)
+SELECT continent, year, ROUND(AVG(population), 2) AS avg_population
+FROM temp_pop
+WHERE continent = 'South America' AND year = 2003;
+
+-- Find the country with the smallest pop in 2007
+WITH temp_pop AS (
+  SELECT *
+  FROM population_years
+  JOIN countries
+  ON population_years.country_id = countries.id
+)
+SELECT name AS country, MIN(population) AS smallest_population
+FROM temp_pop;
+
+-- Find the avg pop of Poland during the time period covered by this dataset
+WITH temp_pop AS (
+  SELECT *
+  FROM population_years
+  JOIN countries
+  ON population_years.country_id = countries.id
+)
+SELECT name AS country, ROUND(AVG(population), 2) AS avg_population
+FROM temp_pop
+WHERE name = 'Poland';
+
+-- Find the number of countries with the word "The" in their name
+WITH temp_pop AS (
+  SELECT *
+  FROM population_years
+  JOIN countries
+  ON population_years.country_id = countries.id
+)
+SELECT name
+FROM temp_pop
+WHERE name LIKE '% The%'
+GROUP BY name;
+
+-- Find the total population of each continent in 2010
+WITH temp_pop AS (
+  SELECT *
+  FROM population_years
+  JOIN countries
+  ON population_years.country_id = countries.id
+)
+SELECT continent, year, SUM(population) AS total_population
+FROM temp_pop
+WHERE year = 2010
+GROUP BY continent;
